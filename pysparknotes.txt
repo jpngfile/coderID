@@ -1,0 +1,91 @@
+## Using pyspark
+- might not use console
+-- hard code, or interactive python
+-- haven't decided
+
+bigquery has no code, just metadata. We grab the data from bigquery to put in RDD
+- might be faster to query directoy from bigquery, instead of cloning git repo locally
+stored in a resilient, distributed dataset (RDD) in pyspark
+- RDD is a bunch of clustered machines
+
+deferred computation for the RDD
+- Uses a deferred pipeline, only needs to keep data for the present computation
+- waits until terminal, and computers backward the closure
+- in pipeline, all components take an RDD in as input, and output updated RDD
+
+Pipeline view
+Repos -> Authors -> Commit Metadata -> Commit Code -> etc...
+
+Getting the commit code is rate limited by Github
+Need to rewrite code to be PySpark, instead of sklearn
+
+I work Getting the feature matrix and reducing it (removing the features that don't contribute)
+Also, moving forward to cross validation
+
+when reducing features
+1. When classifying intrarepo, we classify one-vs-all for all authors in that repo
+- We choose a validation set. We use stratified K-fold CV for this (Selected rows at random from the feature matrix)
+- Rest of sets are used in testing and training
+- For the k different authors, we get k different important features
+- features reduction has its own cross-validation
+- look up processes of feature reduction
+
+Note: multi classification is faster than one-vs-all but not as effective
+
+At end, return author, precision, recall, F1-score, and AUC, support in csv format
+
+In diagram;
+- R is current repo
+- A is what the author as written
+- R_A is code from all repos author has contribued to, except the author contributions
+- P is positive examples
+- D is detractors (negative examples)
+
+Hard Problems
+1. Extra-repo-class (only outside class)
+- We only test on repos outside a given repo
+- the given repo is the test set
+- still doing one-vs-all
+- Positive training set is all code author has written except current repo
+- detrctor training set is all code from repos author has contribted to, except for their contributions (not including current repo)
+- i.e. one level of separation of repos away
+- Don't need to do final cross-validation
+
+Output is: repo, author, precision, recall, F1 score, AUC, support
+
+2. Extra-repo-open
+- Same as above, except we include in our feature matrix, authors that are not in the repo at all
+- some significant fraction of commits, that weren't written by any of the authors in the repo
+- attribution problem (closed list of suspects), validation problem (one suspect, yes or no), attribution-validation problem (list of suspects, or none of them)
+- To be figured out
+
+We want to stick to modular DRY principles
+- feature reduction should be called once, not a bunch of times in different functions
+- maintain input/output model
+- make sure using the spark RDD paradigm (e.g. use RDD map, not python map)
+- All parts of pipeline that isn't a predictor extends Transformer
+- Want to be as distributed as possible (use map)
+
+References
+- pyspark.ml
+
+How feature reduction works
+- Train a model
+- Drop the worst n% features (e.g. worst 10%)
+- Repeat until the performance drops
+
+Testing
+- Can test pyspark locally
+- Can also use SWAG server, it is set up with pyspark (use local computer as master)
+
+pyspark instructions
+- /usr/local/spark
+- use /usr/loca/spark/sbin/start-slave.sh (and other commands)
+
+on my computer (after installing spark)
+- /usr/local/spark/sbin/start-master.sh
+- Go to the IP it returns (it will show you what happens)
+
+on SWAG
+- ./start-slave/sh --master spark://IP:operations_port
+- Then run can code in the spark terminal

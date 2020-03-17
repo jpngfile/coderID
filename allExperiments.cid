@@ -1,0 +1,8 @@
+new caffesession
+loadGit gitRepos/caffe
+compile
+pruneGit 1000 50 1000
+multiClassSingleModelTest
+multiClassTest
+twoClassTest
+quit

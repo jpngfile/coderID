@@ -1,0 +1,2 @@
+Add github token file info to README
+Fix the errors that keep happening

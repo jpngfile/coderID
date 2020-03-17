@@ -1,0 +1,25 @@
+# old heuristic
+accuracy: 0.32938076416337286
+              precision    recall  f1-score   support
+
+          BF       0.53      0.30      0.39       293
+          FC       0.53      0.49      0.51       264
+         OTH       0.01      0.18      0.01        11
+          RF       0.50      0.16      0.24       191
+
+   micro avg       0.33      0.33      0.33       759
+   macro avg       0.39      0.28      0.29       759
+weighted avg       0.52      0.33      0.39       759
+
+# new heuristic
+accuracy: 0.4308300395256917
+              precision    recall  f1-score   support
+
+          BF       0.56      0.56      0.56       293
+          FC       0.51      0.52      0.51       264
+         OTH       0.01      0.09      0.01        11
+          RF       0.47      0.14      0.21       191
+
+   micro avg       0.43      0.43      0.43       759
+   macro avg       0.39      0.33      0.32       759
+weighted avg       0.51      0.43      0.45       759

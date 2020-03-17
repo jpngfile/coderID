@@ -1,0 +1,128 @@
+python coderID.py
+
+# Show available commands
+> help
+
+# describes the commit
+> help loadGit
+
+# There is a save file that stores the mining results
+
+# Load repo as a directory of repos (loadGitRepos)
+# OR, load a single repo (loadGit)
+
+# Need to get dataset sometime
+# Also available in SWAG server - wait to get usergroups on SWAG server
+
+# Data are like CSV files
+# name, language, numDevelopers, CI?, license, size, etc.
+# repos are divided into small, medium bit
+# They are the actual repos cloned
+
+# example: pion (good for testing)
+# google code jam is in a branch of this project
+
+# The parameter to loadgit is a repo folder
+# default.cid is loaded automatically
+
+> new
+# Will create a new fresh space, does not overwrite
+# Save will overwritet the file
+
+> loadGit ../gitSamples/small/pion
+
+# Does not work on deep nested repos
+> loadGitRepos ../gitSamples/small/
+
+# Actual mining - finds the commits, and trains the random forest
+> compile
+
+# limit the amount of authors. Will remove authors and their commits
+> help pruneGit
+
+# e.g. remove authors less than 5 functions
+> pruneGit 0 5
+
+# author class includes all info about their commits
+
+# summary of authors
+> displayGitAuthors
+
+# Runs classification. Returns metrics on all authors
+> classifyFunctions
+
+# On small repos, the features become kind of bogus
+# This is too memory intensive for a laptop
+# Weird random errors is probably memory
+# Can't add new repos after compile. Need new session and recompile
+
+# Lizard extraction
+# Some features require more computation than others. Will need to investigate which is which
+# Lizard entire analysis will run, can't pick and choose features
+# Use if there is some problem with commit message classification
+#
+#
+# Add PyGithub to the requirements
+
+# Drawing graphs
+# Draw an AUC curve for each author. The data looks strange right now
+# Create plotting functions
+# def drawAUC(setname, authorName, target, output_prob_for_positive_label, pos_label)
+# filename = setname_authorName_ROC.png
+# generate filename automatically
+# Create an ROC curve with value given, for each author, and one with all authors
+#
+# Bar graph of all repos precision and recall
+# Need to get entire set and all results
+#
+# Scatter plot of precision, recall, F1-score versus support
+#
+# What is the test repo to get the results (want to make sure they match)
+# Caffe repo (small)
+#
+# Want to show importance of features
+# We have importance of featues for each
+# pair-wise ranking correlation. Aggregate into a mean
+# Take top 100 of each. How many of the features appear in 50% of the top 100.
+# How many repos does each feature in. Histogram of amount of repos feature appears in
+# Or sort and plot the results
+#
+# An author with less than 10 functions will break cross-validation
+# Need to pruneGit. typically filter out authors with less than 50 functions
+#
+/usr/lib/x86_64-linux-gnu/libclang-3.8.so.1
+
+# two-class test is the one-vs-all test
+# bar chart is a one off graphing chart
+# Can add new metrics to the csv rows
+#
+> pruneGit 10000 50 10000
+
+# Updates
+
+# types of classes
+1. Multiclass - just classify against all authors
+2. Train one-vs-all for all authors
+3. Two-class test for a single author
+
+# Write a method that runs all 3 experiments on a given repo, and outputs all results to csv files
+# For the testing, try to make it a bash script
+# per repository, average F-measure per technique on a bar graph
+# Actually, can't put the two-class test on the same graph
+# There will be a root shell script
+# single line command to experiment on a single repo
+# Has to be a python script, cid can't take command line args
+# Could generate a cid script
+#
+# The commands for the tests
+twoClassTest - one-vs-all for each author
+multiClassTest - multiple one-vs-all combined together
+multiClassSingleModelTest - standard multiclass classification
+
+# feature selection is now directly in front of model training
+# With multiple models, an no named column, this is progamatically difficult
+# To make sure that features are not overfitting.
+#
+# Go through all code and optimize
+# Focus on the mining, and feature detection
+# Learning code, not much can be done

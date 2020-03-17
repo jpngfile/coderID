@@ -1,0 +1,15 @@
+read in repo from command line
+load git
+compile
+prune
+run multiclass
+save results in separate file
+run multiclass several models
+run two class test
+
+# option 1 - create directly from python
+# option 2 - write a cid file, using a bash script
+# option 3 - make multiclass save to a different name
+
+# How to merge csv files?
+# Maybe don't need to
